@@ -1,5 +1,5 @@
 /* myRealpath is my realpath() implementation. 
- * This program gets a path from argv and pass it to the function. 
+ * This program gets (absolute or relative) paths from argv and passes them to the function. 
  * You can pass multiple arguments to the program. */
 
 #define _POSIX_SOURCE
@@ -108,10 +108,19 @@ char *myRealpath(const char *path, char *resolved_path)
             }
             return resolved_path;
         case LNK:
+            char *buf;
+            if ((buf = malloc(PATH_MAX)) == NULL) {
+                return NULL;
+            }
+            if (readlink(path, buf, PATH_MAX) == -1) {
+                return NULL;
+            }
+            /* gcc outputs Wincompatible-pointer-types but don't know why
             char buf[PATH_MAX];
             if (readlink(path, &buf, PATH_MAX) == -1) {
                 return NULL;
             }
+            */
             strncpy(t1, buf, PATH_MAX);
             strncpy(t2, buf, PATH_MAX);
             dname = dirname(t1);
@@ -125,11 +134,16 @@ char *myRealpath(const char *path, char *resolved_path)
             if (getcwd(cwd, PATH_MAX) == NULL) {
                 return NULL;
             }
-            if (!strncmp(dname, ".", 1))
-                snprintf(resolved_path, PATH_MAX, "%s", cwd);
-            else
-                snprintf(resolved_path, PATH_MAX, "%s/%s", cwd, fname);
-
+            if (!strncmp(dname, ".", 1)) {
+                if (snprintf(resolved_path, PATH_MAX, "%s", cwd) >= PATH_MAX) {
+                    return NULL;
+                }
+            } else {
+                if (snprintf(resolved_path, PATH_MAX, "%s/%s", cwd, fname) >= PATH_MAX) {
+                    return NULL;
+                }
+            }
+            free(buf);
             return resolved_path;
         default:
             /* Should not reach here */
