@@ -1,4 +1,4 @@
-/* myRealpath is my realpath() implementation. 
+/* This program is my realpath() implementation. 
  * This program gets a path from argv and pass it to the function. 
  * You can pass multiple arguments to the program. */
 
