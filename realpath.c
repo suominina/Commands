@@ -151,10 +151,10 @@ char *myRealpath(const char *path, char *resolved_path)
             free(buf);
             return resolved_path;
         default:
-            /* Should not reach here */
+            /* Should never reach here */
             return NULL;
     }
-    /* Should not reach here */
+    /* Should never reach here */
     return NULL;     
 }
 
