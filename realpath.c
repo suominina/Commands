@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-/* myRealpath is my realpath() implementation. 
- * This program gets (absolute or relative) paths from argv and passes them to the function. 
-=======
 /* This program is my realpath() implementation. 
  * This program gets a path from argv and pass it to the function. 
->>>>>>> b5b93d512099f718573406aaea78c281afbc20a1
  * You can pass multiple arguments to the program. */
 
 #define _POSIX_SOURCE
